@@ -14,18 +14,32 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String     @id @default(uuid())
+  email     String     @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime   @default(now())
   reminders Reminder[]
 }
 
 model Reminder {
-  id        String   @id @default(uuid())
-  title     String
-  time      DateTime
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
+  id                  String     @id @default(uuid())
+  title               String
+  time                DateTime
+  snoozedUntil        DateTime?
+  completed           Boolean    @default(false)
+  isRecurring         Boolean    @default(false)
+  recurrenceRule      String?
+  remindBeforeMinutes Int        @default(15)
+  importance          Importance @default(MEDIUM)
+  address             String?
+  notes               String?
+  createdAt           DateTime   @default(now())
+  userId              String
+  user                User       @relation(fields: [userId], references: [id])
+}
+
+enum Importance {
+  LOW
+  MEDIUM
+  HIGH
 }
